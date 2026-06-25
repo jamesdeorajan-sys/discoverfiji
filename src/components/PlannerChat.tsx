@@ -12,6 +12,20 @@ const EXAMPLES = [
   "Yasawa Islands, 4 days",
 ];
 
+/** Lagi's responses use simple markdown (**bold**, occasional [text](url)
+ *  links). The Worker's own widget renders this with a custom parser —
+ *  this mirrors that lightly rather than pulling in a full markdown library
+ *  for a few patterns. */
+function renderLagiText(text: string) {
+  const parts = text.split(/(\*\*[^*]+\*\*)/g);
+  return parts.map((part, i) => {
+    if (part.startsWith("**") && part.endsWith("**")) {
+      return <strong key={i}>{part.slice(2, -2)}</strong>;
+    }
+    return <span key={i}>{part}</span>;
+  });
+}
+
 export default function PlannerChat() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [input, setInput] = useState("");
@@ -79,7 +93,7 @@ export default function PlannerChat() {
                   : "mr-auto max-w-[85%] rounded-lg border-l-2 border-reef-light bg-paper/10 px-3 py-2 text-sm text-paper"
               }
             >
-              {m.content}
+              {m.role === "assistant" ? renderLagiText(m.content) : m.content}
             </div>
           ))}
           {isLoading && (
