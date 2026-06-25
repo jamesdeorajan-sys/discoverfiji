@@ -94,51 +94,15 @@ create table blog_articles (
   created_at timestamptz default now()
 );
 
--- ── AI Conversations (chat memory for the AI concierge) ────────────
-create table ai_conversations (
-  id uuid primary key default uuid_generate_v4(),
-  session_id text not null,
-  role text check (role in ('user','assistant')) not null,
-  content text not null,
-  intent text,
-  created_at timestamptz default now()
-);
-create index idx_ai_conversations_session on ai_conversations(session_id);
-
--- ── Quotes (AI Quote Generator output) ─────────────────────────────
-create table quotes (
-  id uuid primary key default uuid_generate_v4(),
-  session_id text,
-  arrival_airport text,
-  resort_id uuid references resorts(id),
-  resort_name_freetext text, -- in case resort isn't in our table yet
-  passengers int,
-  travel_date date,
-  vehicle_type text,
-  price numeric,
-  currency text default 'AUD',
-  booking_handoff_url text, -- the fijitourtransfers.com link generated for this quote
-  created_at timestamptz default now()
-);
-
--- ── Leads (captured before handoff to Fiji Tour Transfers) ────────
-create table leads (
-  id uuid primary key default uuid_generate_v4(),
-  session_id text,
-  name text,
-  email text,
-  phone text,
-  intent_category text,
-  travel_dates text,
-  group_size int,
-  budget_signal text, -- 'budget','mid','premium'
-  itinerary_summary text,
-  quote_id uuid references quotes(id),
-  source_page text, -- which page/flow the lead came from
-  handed_off boolean default false, -- true once sent to Fiji Tour Transfers
-  handed_off_at timestamptz,
-  created_at timestamptz default now()
-);
+-- ── AI chat + leads ─────────────────────────────────────────────────
+-- DECISION (Session 46, 2026-06-23): no separate AI brain, leads table,
+-- or conversation memory here. DiscoverFiji.ai's chat UI proxies server-side
+-- to the existing Lagi Worker (fiji-chat-widget, site_id: 'lagi_public'),
+-- which already handles RAG search, heat scoring, D1 lead capture, partner
+-- routing, and WhatsApp/email notification automatically on every message.
+-- Building a parallel leads/quotes/conversations system here would just
+-- fragment the same signal Lagi already compounds across 29+ partner sites.
+-- See src/app/api/chat/route.ts for the proxy implementation.
 
 -- ── Row Level Security ─────────────────────────────────────────────
 -- Public content tables: readable by anyone, writable only via service role (server-side).
@@ -161,10 +125,3 @@ create policy "Public read published reviews" on reviews
   for select using (published = true);
 create policy "Public read published blog articles" on blog_articles
   for select using (published = true);
-
--- Lead/quote/conversation tables: no public read access at all.
--- All access goes through server-side code using the service role key.
-alter table leads enable row level security;
-alter table quotes enable row level security;
-alter table ai_conversations enable row level security;
--- (No policies created = no access except via service role, which bypasses RLS.)

@@ -1,4 +1,5 @@
 import Link from "next/link";
+import PlannerChat from "@/components/PlannerChat";
 
 const categories = [
   { label: "Airport Transfers", sounding: "14", href: "/airport-transfers" },
@@ -9,13 +10,6 @@ const categories = [
   { label: "Travel Guide", sounding: "19", href: "/guide" },
   { label: "Horse Riding", sounding: "76", href: "/horse-riding" },
   { label: "Adventure Activities", sounding: "52", href: "/adventure" },
-];
-
-const planExamples = [
-  "5-day honeymoon on Denarau",
-  "Family week with two kids",
-  "Adventure trip, Coral Coast",
-  "Yasawa Islands, 4 days",
 ];
 
 const reasons = [
@@ -64,30 +58,8 @@ export default function Home() {
             full itinerary — charted out before you&apos;ve finished reading this.
           </p>
 
-          {/* AI prompt box, styled like a chart log entry */}
-          <div className="mt-10 w-full max-w-2xl rounded-lg border border-paper/20 bg-depth-light/60 p-2 backdrop-blur">
-            <div className="flex items-center gap-3 rounded-md bg-paper px-4 py-4 sm:py-5">
-              <CompassIcon className="h-5 w-5 flex-shrink-0 text-depth/70" />
-              <input
-                type="text"
-                placeholder="What would you like to do in Fiji?"
-                className="w-full bg-transparent font-body text-base text-inkline placeholder:text-inkline/50 focus:outline-none"
-              />
-              <button className="flex-shrink-0 rounded-md bg-coral px-4 py-2 font-display text-sm font-medium text-cream transition hover:bg-coral-light">
-                Plan it
-              </button>
-            </div>
-            <div className="flex flex-wrap gap-2 px-2 pt-3 pb-1">
-              {planExamples.map((ex) => (
-                <button
-                  key={ex}
-                  className="rounded-full border border-paper/25 px-3 py-1.5 font-mono text-xs text-paper/80 transition hover:border-coral hover:text-coral-light"
-                >
-                  {ex}
-                </button>
-              ))}
-            </div>
-          </div>
+          {/* AI prompt box — wired to Lagi via /api/chat, not decorative */}
+          <PlannerChat />
 
           <div className="mt-8 flex flex-wrap gap-4">
             <Link
@@ -244,23 +216,6 @@ function ChartBackdrop() {
           {s.v}
         </text>
       ))}
-    </svg>
-  );
-}
-
-function CompassIcon({ className }: { className?: string }) {
-  return (
-    <svg
-      viewBox="0 0 24 24"
-      fill="none"
-      className={className}
-      aria-hidden="true"
-    >
-      <circle cx="12" cy="12" r="9" stroke="currentColor" strokeWidth="1.4" />
-      <path
-        d="M12 4 L13.3 11 L20 12 L13.3 13 L12 20 L10.7 13 L4 12 L10.7 11 Z"
-        fill="currentColor"
-      />
     </svg>
   );
 }
