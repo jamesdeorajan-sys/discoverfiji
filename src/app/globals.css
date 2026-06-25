@@ -1,0 +1,59 @@
+@import "tailwindcss";
+
+:root {
+  --color-depth: #0B1F2A;
+  --color-depth-light: #142F3E;
+  --color-paper: #E4D9C2;
+  --color-paper-light: #EFE6D4;
+  --color-reef: #2C7A6E;
+  --color-reef-light: #3F9C8E;
+  --color-coral: #E0654A;
+  --color-coral-light: #EC8268;
+  --color-cream: #F5EFE2;
+  --color-inkline: #1A2A33;
+}
+
+@theme inline {
+  --color-depth: var(--color-depth);
+  --color-depth-light: var(--color-depth-light);
+  --color-paper: var(--color-paper);
+  --color-paper-light: var(--color-paper-light);
+  --color-reef: var(--color-reef);
+  --color-reef-light: var(--color-reef-light);
+  --color-coral: var(--color-coral);
+  --color-coral-light: var(--color-coral-light);
+  --color-cream: var(--color-cream);
+  --color-inkline: var(--color-inkline);
+  --font-display: var(--font-space-grotesk);
+  --font-body: var(--font-source-sans);
+  --font-mono: var(--font-plex-mono);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background: var(--color-depth);
+  color: var(--color-cream);
+  font-family: var(--font-body), system-ui, sans-serif;
+}
+
+::selection {
+  background: var(--color-coral);
+  color: var(--color-cream);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+:focus-visible {
+  outline: 2px solid var(--color-coral);
+  outline-offset: 3px;
+}
