@@ -1,15 +1,20 @@
-import Link from "next/link";
 import PlannerChat from "@/components/PlannerChat";
 
+// STOP-GAP FIX (Session 48): the dedicated DiscoverFiji.ai pages these tiles
+// were meant to link to (/tours, /resorts, etc.) haven't been built yet —
+// they were 404ing on the live site. Routing to real, live pages on
+// fijitourtransfers.com / nadiairporttransfers.com instead so no click on
+// this page is a dead end. Swap each `href` back to an internal route as the
+// real DiscoverFiji page for that category gets built.
 const categories = [
-  { label: "Airport Transfers", sounding: "14", href: "/airport-transfers" },
-  { label: "Private Tours", sounding: "27", href: "/tours" },
-  { label: "Island Tours", sounding: "63", href: "/island-tours" },
-  { label: "Resorts", sounding: "08", href: "/resorts" },
-  { label: "Things To Do", sounding: "41", href: "/things-to-do" },
-  { label: "Travel Guide", sounding: "19", href: "/guide" },
-  { label: "Horse Riding", sounding: "76", href: "/horse-riding" },
-  { label: "Adventure Activities", sounding: "52", href: "/adventure" },
+  { label: "Airport Transfers", sounding: "14", href: "https://nadiairporttransfers.com/", external: true },
+  { label: "Private Tours", sounding: "27", href: "https://fijitourtransfers.com/tours/", external: true },
+  { label: "Island Tours", sounding: "63", href: "https://fijitourtransfers.com/tours/", external: true },
+  { label: "Resorts", sounding: "08", href: "https://wa.me/61478886145", external: true },
+  { label: "Things To Do", sounding: "41", href: "https://fijitourtransfers.com/tours/", external: true },
+  { label: "Travel Guide", sounding: "19", href: "https://fijitourtransfers.com/guide/fiji-with-kids/", external: true },
+  { label: "Horse Riding", sounding: "76", href: "https://wa.me/61478886145", external: true },
+  { label: "Adventure Activities", sounding: "52", href: "https://fijitourtransfers.com/tours/", external: true },
 ];
 
 const reasons = [
@@ -59,21 +64,23 @@ export default function Home() {
           </p>
 
           {/* AI prompt box — wired to Lagi via /api/chat, not decorative */}
-          <PlannerChat />
+          <div id="planner">
+            <PlannerChat />
+          </div>
 
           <div className="mt-8 flex flex-wrap gap-4">
-            <Link
-              href="/plan"
+            <a
+              href="#planner"
               className="rounded-md bg-coral px-6 py-3 font-display text-sm font-medium text-cream transition hover:bg-coral-light"
             >
               Start Planning
-            </Link>
-            <Link
-              href="/airport-transfers"
+            </a>
+            <a
+              href="https://nadiairporttransfers.com/"
               className="rounded-md border border-paper/30 px-6 py-3 font-display text-sm font-medium text-paper transition hover:border-paper hover:bg-paper/5"
             >
               Book Airport Transfer
-            </Link>
+            </a>
             <a
               href="https://wa.me/61478886145"
               className="rounded-md border border-reef-light/40 px-6 py-3 font-display text-sm font-medium text-reef-light transition hover:border-reef-light hover:bg-reef/10"
@@ -95,7 +102,7 @@ export default function Home() {
 
         <div className="mt-10 grid grid-cols-2 gap-px overflow-hidden rounded-lg border border-paper/15 bg-paper/15 sm:grid-cols-4">
           {categories.map((c) => (
-            <Link
+            <a
               key={c.label}
               href={c.href}
               className="group flex flex-col justify-between bg-depth p-5 transition hover:bg-depth-light"
@@ -106,7 +113,7 @@ export default function Home() {
               <span className="mt-6 font-display text-base text-paper group-hover:text-cream">
                 {c.label}
               </span>
-            </Link>
+            </a>
           ))}
         </div>
       </section>
@@ -143,12 +150,12 @@ export default function Home() {
           Tell it where you&apos;re headed. It&apos;ll chart the rest.
         </h2>
         <div className="mt-8 flex flex-wrap items-center justify-center gap-4">
-          <Link
-            href="/plan"
+          <a
+            href="#planner"
             className="rounded-md bg-coral px-7 py-3.5 font-display text-sm font-medium text-cream transition hover:bg-coral-light"
           >
             Start Planning Free
-          </Link>
+          </a>
         </div>
       </section>
 
