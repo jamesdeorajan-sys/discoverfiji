@@ -14,6 +14,8 @@ type DestinationRow = {
   body_md: string | null;
   meta_title: string | null;
   meta_description: string | null;
+  lat: number | null;
+  lng: number | null;
   published: number;
 };
 
@@ -88,6 +90,61 @@ function ContourRule() {
   );
 }
 
+/** Builds the JSON-LD schema for a destination page: TouristDestination +
+ *  Product/Offer per tour + BreadcrumbList. This is the piece that
+ *  actually drives AI citation and rich results -- the visible page
+ *  content alone isn't enough for crawlers to parse pricing, location,
+ *  and offers reliably. Every one of the 500 planned pages gets this for
+ *  free since it's built into the shared template, not per-page. */
+function buildSchema(destination: DestinationRow, tours: TourRow[]) {
+  const url = `https://discover.vakaviti.ai/destinations/${destination.slug}`;
+
+  const touristDestination: Record<string, unknown> = {
+    "@type": "TouristDestination",
+    "@id": url,
+    name: destination.name,
+    description: destination.summary ?? undefined,
+    url,
+  };
+  if (destination.lat != null && destination.lng != null) {
+    touristDestination.geo = {
+      "@type": "GeoCoordinates",
+      latitude: destination.lat,
+      longitude: destination.lng,
+    };
+  }
+
+  const products = tours.map((tour) => ({
+    "@type": "Product",
+    name: tour.name,
+    description: tour.description ?? undefined,
+    url: tour.booking_url ?? url,
+    offers:
+      tour.price_from != null
+        ? {
+            "@type": "Offer",
+            price: tour.price_from,
+            priceCurrency: tour.currency,
+            url: tour.booking_url ?? url,
+            availability: "https://schema.org/InStock",
+          }
+        : undefined,
+  }));
+
+  const breadcrumb = {
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Lagi", item: "https://discover.vakaviti.ai" },
+      { "@type": "ListItem", position: 2, name: destination.name, item: url },
+    ],
+  };
+
+  return {
+    "@context": "https://schema.org",
+    "@graph": [touristDestination, breadcrumb, ...products],
+  };
+}
+
 export default async function DestinationPage({
   params,
 }: {
@@ -102,9 +159,14 @@ export default async function DestinationPage({
     .split(/\n\s*\n/)
     .map((p) => p.trim())
     .filter(Boolean);
+  const schema = buildSchema(destination, tours);
 
   return (
     <main className="bg-depth text-cream">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }}
+      />
       <div className="mx-auto max-w-3xl px-6 py-16 sm:py-24">
         <Link
           href="/"
