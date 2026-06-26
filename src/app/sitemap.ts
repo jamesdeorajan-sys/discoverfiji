@@ -7,6 +7,15 @@ export const revalidate = 3600;
 
 type DestinationRow = { slug: string; updated_at: string };
 
+/** D1's `datetime('now')` produces SQLite's native format
+ *  ("2026-06-26 07:54:12" -- space-separated, no timezone), which is NOT
+ *  valid per the W3C datetime format sitemap <lastmod> tags require.
+ *  Google's sitemap validator correctly flags this as "Invalid date" --
+ *  convert to proper ISO 8601 before handing it to Next.js. */
+function toIsoDate(sqliteDatetime: string): Date {
+  return new Date(sqliteDatetime.replace(" ", "T") + "Z");
+}
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = "https://discover.vakaviti.ai";
   const staticEntries: MetadataRoute.Sitemap = [
@@ -20,7 +29,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     );
     destinationEntries = destinations.map((d) => ({
       url: `${base}/destinations/${d.slug}`,
-      lastModified: d.updated_at,
+      lastModified: toIsoDate(d.updated_at),
       changeFrequency: "weekly",
       priority: 0.8,
     }));
