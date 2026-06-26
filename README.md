@@ -104,7 +104,7 @@ Connect this repo to Vercel (vercel.com -> Add New Project -> Import this
 repo) and add the three `CLOUDFLARE_*` environment variables in the Vercel
 project settings once you have them. Every push to `main` auto-deploys.
 
-Live: discoverfiji.ai (domain connection in progress)
+Live: discover.vakaviti.ai (discoverfiji.ai redirects here — Session 48)
 
 ## Next steps
 

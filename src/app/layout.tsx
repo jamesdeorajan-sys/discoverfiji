@@ -21,9 +21,13 @@ const plexMono = IBM_Plex_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "DiscoverFiji.ai — Your Personal AI Guide to Fiji",
+  metadataBase: new URL("https://discover.vakaviti.ai"),
+  title: "Plan Your Fiji Trip — Powered by Lagi | Vakaviti.ai",
   description:
-    "Plan your dream Fiji holiday in seconds. AI-powered trip planning, airport transfers, tours, and itineraries for Fiji.",
+    "Plan your dream Fiji holiday in seconds with Lagi, Vakaviti.ai's AI travel guide. Real tours, real transfers, real prices — no sales pitch.",
+  alternates: {
+    canonical: "/",
+  },
 };
 
 export default function RootLayout({

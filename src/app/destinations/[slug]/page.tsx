@@ -53,8 +53,11 @@ export async function generateMetadata({
   if (!destination) return {};
 
   return {
-    title: destination.meta_title ?? `${destination.name} — DiscoverFiji.ai`,
+    title: destination.meta_title ?? `${destination.name} — Lagi's Fiji Guide`,
     description: destination.meta_description ?? destination.summary ?? undefined,
+    alternates: {
+      canonical: `/destinations/${destination.slug}`,
+    },
   };
 }
 
@@ -107,7 +110,7 @@ export default async function DestinationPage({
           href="/"
           className="font-mono text-xs uppercase tracking-[0.2em] text-paper/50 transition hover:text-reef-light"
         >
-          ← DiscoverFiji.ai
+          ← Lagi by Vakaviti.ai
         </Link>
 
         <p className="mt-8 font-mono text-xs uppercase tracking-[0.25em] text-reef-light">
@@ -210,8 +213,8 @@ export default async function DestinationPage({
 
       <footer className="border-t border-paper/10 px-6 py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 font-mono text-xs text-paper/50 sm:flex-row">
-          <span>DiscoverFiji.ai — Discover Fiji Smarter</span>
-          <span>Powered by Fiji Tour Transfers</span>
+          <span>Lagi — Fiji&apos;s AI travel guide</span>
+          <span>Powered by Vakaviti.ai</span>
         </div>
       </footer>
     </main>

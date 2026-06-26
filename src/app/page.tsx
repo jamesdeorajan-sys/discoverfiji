@@ -122,7 +122,7 @@ export default function Home() {
       <section className="border-t border-paper/10 bg-depth-light/40">
         <div className="mx-auto max-w-6xl px-6 py-24">
           <p className="font-mono text-xs uppercase tracking-[0.25em] text-reef-light">
-            Why DiscoverFiji.ai
+            Why Lagi
           </p>
           <h2 className="mt-3 max-w-xl font-display text-3xl text-cream sm:text-4xl">
             An AI that actually knows the reef from the rumour.
@@ -161,8 +161,8 @@ export default function Home() {
 
       <footer className="border-t border-paper/10 px-6 py-10">
         <div className="mx-auto flex max-w-6xl flex-col items-center justify-between gap-4 font-mono text-xs text-paper/50 sm:flex-row">
-          <span>DiscoverFiji.ai — Discover Fiji Smarter</span>
-          <span>Powered by Fiji Tour Transfers</span>
+          <span>Lagi — Fiji&apos;s AI travel guide</span>
+          <span>Powered by Vakaviti.ai</span>
         </div>
       </footer>
     </main>
